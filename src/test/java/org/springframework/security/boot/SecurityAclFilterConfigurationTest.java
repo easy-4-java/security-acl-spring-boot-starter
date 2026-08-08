@@ -13,23 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.springframework.security.boot.acl;
+package org.springframework.security.boot;
 
-import org.springframework.security.acls.domain.BasePermission;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * https://elim.iteye.com/blog/2269021
+ * Unit tests for {{ @link SecurityAclFilterConfiguration }}.
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
+@DisplayName("SecurityAclFilterConfiguration Tests")
+class SecurityAclFilterConfigurationTest {
 
-public class BasePermissionExt extends BasePermission {
-	
-	public BasePermissionExt(int mask) {
-		super(mask);
-	}
-
-	public BasePermissionExt(int mask, char code) {
-		super(mask, code);
-	}
-	
+    @Test
+    @DisplayName("Instance can be created via constructor")
+    void testInstantiation() {
+        SecurityAclFilterConfiguration instance = new SecurityAclFilterConfiguration();
+        assertThat(instance).isNotNull();
+    }
 }
