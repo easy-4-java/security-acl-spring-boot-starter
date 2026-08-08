@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
 
 /**
  * TODO
- * @author 		： <a href="https://github.com/hiwepy">wandl</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 public class Sl4jAuditLogger implements AuditLogger {
 
