@@ -15,21 +15,24 @@
  */
 package org.springframework.security.boot.acl;
 
-import org.springframework.security.acls.domain.BasePermission;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * https://elim.iteye.com/blog/2269021
+ * Unit tests for {{ @link BasePermissionExt }}.
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
+@DisplayName("BasePermissionExt Tests")
+class BasePermissionExtTest {
 
-public class BasePermissionExt extends BasePermission {
-	
-	public BasePermissionExt(int mask) {
-		super(mask);
-	}
-
-	public BasePermissionExt(int mask, char code) {
-		super(mask, code);
-	}
-	
+    @Test
+    @DisplayName("Instance can be created via constructor")
+    void testInstantiation() {
+        BasePermissionExt instance = new BasePermissionExt(null);
+        assertThat(instance).isNotNull();
+    }
 }
