@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -193,14 +193,13 @@ public class SecurityAclAutoConfiguration {
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsServiceAdapter userDetailsService,
 			GrantedAuthoritiesMapper authoritiesMapper, PasswordEncoder passwordEncoder, UserCache userCache) {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
 		provider.setAuthoritiesMapper(authoritiesMapper);
 		provider.setForcePrincipalAsString(aclProperties.isForcePrincipalAsString());
 		provider.setHideUserNotFoundExceptions(aclProperties.isHideUserNotFoundExceptions());
 		provider.setPasswordEncoder(passwordEncoder);
 		provider.setUserCache(userCache);
 		provider.setUserDetailsPasswordService(userDetailsService);
-		provider.setUserDetailsService(userDetailsService);
 		return provider;
 	}
 

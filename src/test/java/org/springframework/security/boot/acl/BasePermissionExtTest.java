@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link BasePermissionExt }}.
+ * Unit tests for {@link BasePermissionExt}.
  *
  * @author [@Loong Wan](https://github.com/loong10k)
  * @since 1.0.0
@@ -30,9 +30,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BasePermissionExtTest {
 
     @Test
-    @DisplayName("Instance can be created via constructor")
-    void testInstantiation() {
-        BasePermissionExt instance = new BasePermissionExt(null);
+    @DisplayName("Single-arg constructor creates instance with given mask")
+    void testSingleArgConstructor() {
+        BasePermissionExt instance = new BasePermissionExt(1);
         assertThat(instance).isNotNull();
+        assertThat(instance.getMask()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Two-arg constructor creates instance with given mask and code")
+    void testTwoArgConstructor() {
+        BasePermissionExt instance = new BasePermissionExt(2, 'w');
+        assertThat(instance).isNotNull();
+        assertThat(instance.getMask()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("Mask values are correct for various permissions")
+    void testMaskValues() {
+        assertThat(new BasePermissionExt(0).getMask()).isEqualTo(0);
+        assertThat(new BasePermissionExt(4).getMask()).isEqualTo(4);
+        assertThat(new BasePermissionExt(8).getMask()).isEqualTo(8);
+        assertThat(new BasePermissionExt(16).getMask()).isEqualTo(16);
     }
 }
