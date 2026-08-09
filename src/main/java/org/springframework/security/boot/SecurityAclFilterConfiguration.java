@@ -38,6 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureBefore({ SecurityFilterAutoConfiguration.class })
 @ConditionalOnProperty(prefix = SecurityAclProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ SecurityAclProperties.class, ServerProperties.class })
+/**\n * Filter configuration for ACL-based security authorization.\n *\n * @author [@Loong Wan](https://github.com/loong10k)\n * @since 1.0.0\n */
 public class SecurityAclFilterConfiguration {
  
 	@Configuration
