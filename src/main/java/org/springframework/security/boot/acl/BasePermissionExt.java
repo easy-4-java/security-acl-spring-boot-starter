@@ -19,7 +19,7 @@ import org.springframework.security.acls.domain.BasePermission;
 
 /**
  * https://elim.iteye.com/blog/2269021
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 
 public class BasePermissionExt extends BasePermission {
