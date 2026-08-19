@@ -72,6 +72,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * <p>
  * <b>MutableAclService：</b>MutableAclService是用来对Acl进行持久化的，其默认实现类是JdbcMutableAclService。JdbcMutableAclService是继承自JdbcAclService的，所以我们可以同时通过JdbcMutableAclService对Acl进行读取和保存。如果我们希望自己来实现Acl信息的保存的话，我们也可以不使用该接口。
  * </p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Configuration
 @AutoConfigureBefore({ SecurityAutoConfiguration.class })
@@ -84,18 +86,34 @@ public class SecurityAclAutoConfiguration {
 	@Autowired
 	private CacheManager cacheManager;
 
+	/**
+	 * audit Logger.
+	 *
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected AuditLogger auditLogger() {
 		return new Sl4jAuditLogger();
 	}
 
+	/**
+	 * permission Granting Strategy.
+	 *
+	 * @param auditLogger the audit logger
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected PermissionGrantingStrategy permissionGrantingStrategy(AuditLogger auditLogger) {
 		return new DefaultPermissionGrantingStrategy(auditLogger);
 	}
 
+	/**
+	 * acl Authorization Strategy.
+	 *
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected AclAuthorizationStrategy aclAuthorizationStrategy() {
@@ -109,6 +127,13 @@ public class SecurityAclAutoConfiguration {
 		return new AclAuthorizationStrategyImpl(gaGeneralChanges, gaModifyAuditing, gaTakeOwnership);
 	}
 
+	/**
+	 * acl Cache.
+	 *
+	 * @param permissionGrantingStrategy the permission granting strategy
+	 * @param aclAuthorizationStrategy the acl authorization strategy
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected AclCache aclCache(PermissionGrantingStrategy permissionGrantingStrategy,
@@ -119,6 +144,15 @@ public class SecurityAclAutoConfiguration {
 		return new SpringCacheBasedAclCache(cache, permissionGrantingStrategy, aclAuthorizationStrategy);
 	}
 
+	/**
+	 * lookup Strategy.
+	 *
+	 * @param dataSource the data source
+	 * @param aclCache the acl cache
+	 * @param aclAuthorizationStrategy the acl authorization strategy
+	 * @param permissionGrantingStrategy the permission granting strategy
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected LookupStrategy lookupStrategy(DataSource dataSource, AclCache aclCache,
@@ -126,6 +160,14 @@ public class SecurityAclAutoConfiguration {
 		return new BasicLookupStrategy(dataSource, aclCache, aclAuthorizationStrategy, permissionGrantingStrategy);
 	}
 
+	/**
+	 * acl Service.
+	 *
+	 * @param dataSource the data source
+	 * @param lookupStrategy the lookup strategy
+	 * @param aclCache the acl cache
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected AclService aclService(DataSource dataSource, LookupStrategy lookupStrategy, AclCache aclCache) {
@@ -162,6 +204,12 @@ public class SecurityAclAutoConfiguration {
 
 	
 	
+	/**
+	 * method Security Expression Handler.
+	 *
+	 * @param aclPermissionEvaluator the acl permission evaluator
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected MethodSecurityExpressionHandler methodSecurityExpressionHandler(AclPermissionEvaluator aclPermissionEvaluator) {
@@ -172,24 +220,49 @@ public class SecurityAclAutoConfiguration {
 	}
 	
 	
+	/**
+	 * acl Permission Evaluator.
+	 *
+	 * @param aclService the acl service
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected AclPermissionEvaluator aclPermissionEvaluator(AclService aclService) {
 		return new AclPermissionEvaluator(aclService);
 	}
 	
+	/**
+	 * user Cache.
+	 *
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected UserCache userCache() {
 		return new NullUserCache();
 	}
 
+	/**
+	 * authorities Mapper.
+	 *
+	 * @return the result
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	protected GrantedAuthoritiesMapper authoritiesMapper() {
 		return new NullAuthoritiesMapper();
 	}
 
+	/**
+	 * dao Authentication Provider.
+	 *
+	 * @param userDetailsService the user details service
+	 * @param authoritiesMapper the authorities mapper
+	 * @param passwordEncoder the password encoder
+	 * @param userCache the user cache
+	 * @return the result
+	 */
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsServiceAdapter userDetailsService,
 			GrantedAuthoritiesMapper authoritiesMapper, PasswordEncoder passwordEncoder, UserCache userCache) {

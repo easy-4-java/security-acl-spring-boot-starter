@@ -25,11 +25,18 @@ import org.springframework.util.Assert;
 /**
  * TODO
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class Sl4jAuditLogger implements AuditLogger {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
+	/**
+	 * log If Needed.
+	 *
+	 * @param granted the granted
+	 * @param ace the ace
+	 */
 	@Override
 	public void logIfNeeded(boolean granted, AccessControlEntry ace) {
 		Assert.notNull(ace, "AccessControlEntry required");

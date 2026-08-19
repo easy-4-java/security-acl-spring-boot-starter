@@ -20,14 +20,26 @@ import org.springframework.security.acls.domain.BasePermission;
 /**
  * https://elim.iteye.com/blog/2269021
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 
 public class BasePermissionExt extends BasePermission {
 	
+	/**
+	 * Constructs a new base permission ext instance.
+	 *
+	 * @param mask the mask
+	 */
 	public BasePermissionExt(int mask) {
 		super(mask);
 	}
 
+	/**
+	 * Constructs a new base permission ext instance.
+	 *
+	 * @param mask the mask
+	 * @param code the code
+	 */
 	public BasePermissionExt(int mask, char code) {
 		super(mask, code);
 	}
